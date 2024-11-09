@@ -64,6 +64,8 @@ public class AuthController {
         customer.setName(signUpRequest.getName());
         customer.setEmail(signUpRequest.getEmail());
         customer.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        customer.setAddresses(null);
+        customer.setPaymentDetails(null);
 
         customerRepository.save(customer);
 

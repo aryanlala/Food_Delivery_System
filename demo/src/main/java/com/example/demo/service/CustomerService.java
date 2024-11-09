@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.models.*;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
