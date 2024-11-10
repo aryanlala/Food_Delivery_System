@@ -34,11 +34,9 @@ public class Customer {
 
     // Relationships
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<Address> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer",  cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<PaymentDetails> paymentDetails = new ArrayList<>();
 
 }

@@ -27,7 +27,7 @@ public class Restaurant {
     private String phoneNumber;
 
     // Relationships
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<MenuItem> menuItems = new ArrayList<>();
 
 
