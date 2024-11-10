@@ -81,4 +81,13 @@ public class OrderService {
         return orderRepository.findByCustomer(customer);
     }
 
+    public String getOrderStatusByOrderId(Long orderId, String email){
+            Customer customer = customerRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer", "email", email));
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Orders","Order Id",orderId));
+            return order.getStatus();
+
+    }
+
 }

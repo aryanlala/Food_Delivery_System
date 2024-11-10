@@ -35,4 +35,11 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+    @GetMapping("/{orderId}/status")
+    public ResponseEntity<String> trackOrder(Authentication authentication, @PathVariable Long orderId ) {
+        String email = authentication.getName();
+        String status = orderService.getOrderStatusByOrderId(orderId,email);
+        return ResponseEntity.ok(status);
+    }
+
 }
