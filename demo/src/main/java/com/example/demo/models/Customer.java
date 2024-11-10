@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.example.demo.security.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -15,22 +16,23 @@ import java.util.*;
 @Table(name = "Customer")
 @Getter
 @Setter
-public class Customer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Customer extends User {
 
-    @NotBlank(message = "Name is mandatory")
-    private String name;
+    public Customer(){}
 
-    @Email
-    @NotBlank(message = "Email is mandatory")
-    @Column(unique = true, nullable = false)
-    private String email;
 
-    @NotBlank(message = "Password is mandatory")
-    private String password;
+    public Customer(String email, String password, String name, Role role) {
+        super(email, password, role , name);
+    }
+
+//    @Email
+//    @NotBlank(message = "Email is mandatory")
+//    @Column(unique = true, nullable = false)
+//    private String email;
+//
+//    @NotBlank(message = "Password is mandatory")
+//    private String password;
 
     // Relationships
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL,fetch = FetchType.EAGER)

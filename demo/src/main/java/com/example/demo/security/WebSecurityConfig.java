@@ -45,7 +45,20 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
+                        // Public endpoints
                         .requestMatchers("/api/auth/**", "/api/restaurants/**").permitAll()
+
+                        // Admin-only access
+                        .requestMatchers("/api/admin/**").hasAuthority("ADMINISTRATOR")
+
+                        // Restaurant Owner access
+                        .requestMatchers("/api/owner/**").hasAuthority("RESTAURANT_OWNER")
+
+                        // Delivery Personnel access
+                        .requestMatchers("/api/delivery/**").hasAuthority("DELIVERY_PERSON")
+
+                        // Customer access
+                        .requestMatchers("/api/customers/**").hasAuthority("CUSTOMER")
                         .anyRequest().authenticated()
                 );
 

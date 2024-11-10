@@ -30,12 +30,6 @@ public class CustomerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", "email", email));
     }
 
-    public Customer updateCustomerProfile(String email, String name) {
-        Customer customer = getCustomerByEmail(email);
-        customer.setName(name);
-        return customerRepository.save(customer);
-    }
-
     public Address addAddress(String email, Address address) {
         Customer customer = getCustomerByEmail(email);
         address.setCustomer(customer);

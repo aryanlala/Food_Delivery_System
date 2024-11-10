@@ -25,6 +25,7 @@ public class JwtTokenUtil {
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
+                .claim("role", userPrincipal.getAuthorities().iterator().next().getAuthority()) // Add role claim
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -33,12 +34,20 @@ public class JwtTokenUtil {
 
     // Get username from JWT
     public String getUsernameFromJWT(String token) {
-        Claims claims = Jwts.parser()
+        return getClaimsFromJWT(token).getSubject();
+    }
+
+    // Get role from JWT
+    public String getRoleFromJWT(String token) {
+        return getClaimsFromJWT(token).get("role", String.class);
+    }
+
+    // Extract claims from JWT token
+    private Claims getClaimsFromJWT(String token) {
+        return Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-
-        return claims.getSubject();
     }
 
     // Validate JWT Token
@@ -46,8 +55,16 @@ public class JwtTokenUtil {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
-        } catch (Exception ex) {
-            // Log exception if needed
+        } catch (SignatureException ex) {
+            System.out.println("Invalid JWT signature");
+        } catch (MalformedJwtException ex) {
+            System.out.println("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            System.out.println("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            System.out.println("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            System.out.println("JWT claims string is empty");
         }
         return false;
     }

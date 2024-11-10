@@ -19,6 +19,7 @@ public class PaymentDetails {
 
     @NotBlank(message = "Card Number is mandatory")
     @Size(min = 13, max = 19)
+    @Column(unique = true)
     private String cardNumber;
 
     @NotBlank(message = "Card Holder Name is mandatory")

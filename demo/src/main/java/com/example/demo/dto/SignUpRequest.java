@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import com.example.demo.security.Role;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,6 @@ public class SignUpRequest {
     @Size(min = 6, message = "Password must have at least 6 characters")
     private String password;
 
-    // Getters and Setters
-    // ...
+    @NotNull(message = "Role is mandatory")
+    private Role role;
 }
