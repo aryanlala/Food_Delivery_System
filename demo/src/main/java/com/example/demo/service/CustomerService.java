@@ -48,6 +48,4 @@ public class CustomerService {
         return paymentDetailsRepository.save(paymentDetails);
     }
 
-    // Other methods for updating and deleting addresses and payment details
-
 }

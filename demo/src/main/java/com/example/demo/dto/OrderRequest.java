@@ -22,6 +22,4 @@ public class OrderRequest {
     @NotEmpty(message = "Order items cannot be empty")
     private List<OrderItemRequest> items;
 
-    // Getters and Setters
-    // ...
 }

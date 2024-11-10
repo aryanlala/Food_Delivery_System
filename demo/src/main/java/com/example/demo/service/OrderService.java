@@ -81,6 +81,4 @@ public class OrderService {
         return orderRepository.findByCustomer(customer);
     }
 
-    // Other methods for tracking orders, reordering, etc.
-    // ...
 }
