@@ -3,11 +3,14 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.models.Customer;
 import com.example.demo.models.RestaurantOwner;
+import com.example.demo.models.DeliveryPersonnel;
 import com.example.demo.models.User;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.RestaurantOwnerRepository;
+import com.example.demo.repository.DeliveryPersonnelRepository;
 import com.example.demo.security.JwtTokenUtil;
 import com.example.demo.security.Role;
+import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.authentication.*;
@@ -32,6 +35,9 @@ public class AuthController {
 
     @Autowired
     RestaurantOwnerRepository restaurantOwnerRepository;
+
+    @Autowired
+    DeliveryPersonnelRepository deliveryPersonnelRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -62,16 +68,16 @@ public class AuthController {
     // Register Endpoint
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if (customerRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Email address already in use.");
-        }
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
 
         //Similarly needed to add other roles
         if(signUpRequest.getRole() == Role.CUSTOMER){
+            if (customerRepository.existsByEmail(signUpRequest.getEmail())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Email address already in use.");
+            }
             Customer customer = new Customer(
                     signUpRequest.getEmail(),
                     encodedPassword,
@@ -89,6 +95,22 @@ public class AuthController {
                     signUpRequest.getName(),
                     Role.RESTAURANT_OWNER);// Set addresses to null
             restaurantOwnerRepository.save(restaurantOwner);
+        }
+        else if(signUpRequest.getRole() == Role.DELIVERY_PERSON){
+            if (deliveryPersonnelRepository.existsByEmail(signUpRequest.getEmail())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Email address already in use.");
+            }
+            DeliveryPersonnel deliveryPersonnel = new DeliveryPersonnel(
+                    signUpRequest.getEmail(),
+                    encodedPassword,
+                    signUpRequest.getName(),
+                    Role.DELIVERY_PERSON);
+            deliveryPersonnel.setContact(null);
+            deliveryPersonnel.setVehicleType(null);
+            deliveryPersonnel.setAvailable(Boolean.FALSE);
+            deliveryPersonnelRepository.save(deliveryPersonnel);
         }
 
         return ResponseEntity.ok("User registered successfully");
