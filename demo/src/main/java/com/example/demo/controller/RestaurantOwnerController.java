@@ -4,9 +4,11 @@ import com.example.demo.dto.MenuRequest;
 import com.example.demo.dto.RestaurantAccountDTO;
 import com.example.demo.exception.GenericException;
 import com.example.demo.models.MenuItem;
+import com.example.demo.models.Order;
 import com.example.demo.models.Restaurant;
 import com.example.demo.security.UserLoginService;
 import com.example.demo.service.MenuService;
+import com.example.demo.service.RestaurantMenuService;
 import com.example.demo.service.RestaurantProfileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ import java.util.stream.Collectors;
 public class RestaurantOwnerController {
     @Autowired
     private RestaurantProfileService restaurantProfileService;
+
+    @Autowired
+    private RestaurantMenuService restaurantMenuService;
 
     @Autowired
     private UserLoginService userLoginService;
@@ -107,4 +112,30 @@ public class RestaurantOwnerController {
         menuService.removeMenuFromRestaurant(restaurantId, menuItemName);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @GetMapping("{restaurant-account-id}/orders")
+    public ResponseEntity<List<Order>> getAllOrdersByRestaurantId(@PathVariable(name = "restaurant-account-id") Long restaurantId) {
+        List<Order> orders = restaurantMenuService.getOrdersByRestaurantId(restaurantId);
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("{restaurant-account-id}/orders/{status}")
+    public ResponseEntity<List<Order>> getAllOrdersByRestaurantAccountIdAndStatus(
+            @PathVariable(name = "restaurant-account-id") Long restaurantId,
+            @PathVariable(name = "status") String status) {
+        List<Order> orders = restaurantMenuService.getOrdersByRestaurantIdAndStatus(restaurantId, status);
+        return ResponseEntity.ok(orders);
+    }
+
+
+    @PutMapping("{restaurant-account-id}/orders/{order-id}/update-status/{status}")
+    public ResponseEntity<Order> updateOrderStatus(
+            @PathVariable(name = "restaurant-account-id") Long restaurantId,
+            @PathVariable(name = "order-id") Long orderId,
+            @PathVariable(name = "status") String status) {
+        Order order = restaurantMenuService.updateOrder(restaurantId, orderId, status);
+        return ResponseEntity.ok(order);
+    }
+
+
 }
