@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.*;
 import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.*;
@@ -45,6 +46,16 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/isActive").permitAll()
+                        .requestMatchers("/buildInfo").permitAll()
+                        .requestMatchers("/openapi").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/profile").permitAll()
+                        .requestMatchers("/v3/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/openapi/**").permitAll()
                         // Public endpoints
                         .requestMatchers("/api/auth/**", "/api/restaurants/**").permitAll()
 
@@ -60,6 +71,7 @@ public class WebSecurityConfig {
                         // Customer access
                         .requestMatchers("/api/customers/**").hasAuthority("CUSTOMER")
                         .anyRequest().authenticated()
+
                 );
 
         // Add JWT filter
