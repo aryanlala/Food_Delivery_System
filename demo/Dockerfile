@@ -1,5 +1,5 @@
-# Use the official Maven image to build the app
-FROM maven:3.9-openjdk-21-slim AS build
+# Step 1: Use the Maven image with OpenJDK for building the app
+FROM maven:3.9-openjdk-21 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -11,8 +11,8 @@ COPY src /app/src/
 # Build the JAR file using Maven
 RUN mvn clean install
 
-# Use a smaller OpenJDK image to run the app (avoiding unnecessary build dependencies)
-FROM openjdk:21-jdk
+# Step 2: Use a smaller OpenJDK image to run the app (avoiding unnecessary build dependencies)
+FROM openjdk:21-jdk-slim
 
 # Set the maintainer information
 MAINTAINER bits-pilani.com
@@ -20,5 +20,5 @@ MAINTAINER bits-pilani.com
 # Copy the JAR file from the build stage
 COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar /food-delivery-1.0.0.jar
 
-# Define the entrypoint for the container
+# Define the entrypoint to run the JAR file
 ENTRYPOINT ["java", "-jar", "/food-delivery-1.0.0.jar"]
