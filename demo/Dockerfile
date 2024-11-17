@@ -1,10 +1,10 @@
-# Use OpenJDK image for the build stage
-FROM openjdk:21-jdk AS build
+# Use Alpine-based OpenJDK image for the build stage
+FROM openjdk:21-jdk-alpine AS build
 
-# Install Maven and other required dependencies
-RUN apt-get update && \
-    apt-get install -y wget && \
-    apt-get install -y maven
+# Install Maven and other required dependencies using apk
+RUN apk update && \
+    apk add --no-cache wget && \
+    apk add --no-cache maven
 
 # Set the working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src /app/src/
 RUN mvn clean install
 
 # Use a smaller OpenJDK image to run the app (avoiding unnecessary build dependencies)
-FROM openjdk:21-jdk
+FROM openjdk:21-jdk-alpine
 
 # Set the maintainer information
 MAINTAINER bits-pilani.com
