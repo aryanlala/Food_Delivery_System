@@ -3,14 +3,16 @@ package com.example.demo.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "MenuItem")
 @Getter
 @Setter
 @JsonIgnoreProperties({"restaurant"})
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MenuItem {
 
     @Id

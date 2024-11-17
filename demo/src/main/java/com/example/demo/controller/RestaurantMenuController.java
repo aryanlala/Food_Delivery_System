@@ -2,31 +2,33 @@ package com.example.demo.controller;
 
 import com.example.demo.models.MenuItem;
 import com.example.demo.models.Restaurant;
-import com.example.demo.service.RestaurantService;
+import com.example.demo.service.MenuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/restaurants")
-public class RestaurantController {
+@Slf4j
+public class RestaurantMenuController {
 
     @Autowired
-    private RestaurantService restaurantService;
+    private MenuService menuService;
 
     // Browse Restaurants
     @GetMapping("")
     public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        List<Restaurant> restaurants = restaurantService.getAllRestaurants();
+        List<Restaurant> restaurants = menuService.getAllRestaurants();
         return ResponseEntity.ok(restaurants);
     }
 
     // Get Restaurant Menu
     @GetMapping("/{restaurantId}/menu")
     public ResponseEntity<List<MenuItem>> getRestaurantMenu(@PathVariable Long restaurantId) {
-        List<MenuItem> menuItems = restaurantService.getMenuItemsByRestaurantId(restaurantId);
+        List<MenuItem> menuItems = menuService.getMenuItemsByRestaurantId(restaurantId);
         return ResponseEntity.ok(menuItems);
     }
 
@@ -37,8 +39,7 @@ public class RestaurantController {
             @RequestParam(required = false) String cuisine,
             @RequestParam(required = false) Boolean vegetarian) {
 
-        List<MenuItem> menuItems = restaurantService.searchMenuItems(query, cuisine, vegetarian);
+        List<MenuItem> menuItems = menuService.searchMenuItems(query, cuisine, vegetarian);
         return ResponseEntity.ok(menuItems);
     }
 }
-
