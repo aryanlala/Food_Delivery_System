@@ -1,13 +1,10 @@
-# Use an OpenJDK base image
-FROM openjdk:21-jdk AS build
-
-# Install Maven to build the application
-RUN apt-get update && apt-get install -y maven
+# Use the official Maven image to build the app
+FROM maven:3.9-openjdk-21-slim AS build
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the pom.xml and source code to the container (this step optimizes caching of dependencies)
+# Copy the pom.xml and source code to the container
 COPY pom.xml /app/
 COPY src /app/src/
 
