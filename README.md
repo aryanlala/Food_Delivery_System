@@ -13,18 +13,18 @@
 ## Authentication Steps
 
 1. Register using `/api/auth/register` endpoint:
-   - Provide email, name, password
-   - Specify role as one of:
-     - CUSTOMER
-     - RESTAURANT_OWNER
-     - DELIVERY_PERSONNEL
-     - ADMIN
+    - Provide email, name, password
+    - Specify role as one of:
+        - CUSTOMER
+        - RESTAURANT_OWNER
+        - DELIVERY_PERSONNEL
+        - ADMIN
 
 2. Login using `/api/auth/login` endpoint with registered email and password
 3. Use the generated JWT token:
-   - Copy the token from the response
-   - Paste it in the Authorize section of Swagger UI
-   - Format: `Bearer <your_token>`
+    - Copy the token from the response
+    - Paste it in the Authorize section of Swagger UI
+    - Format: `Bearer <your_token>`
 
 ## Technology Stack
 
@@ -32,3 +32,9 @@
 - Database: SQL database hosted on Aiven
 - Authentication: JWT Bearer Tokens
 - Documentation: Swagger UI
+
+## Build docker image
+docker build --tag=food-delivery:latest .
+
+## Run docker image
+docker run -p 9090:9090 food-delivery:latest
