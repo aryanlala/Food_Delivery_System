@@ -1,5 +1,5 @@
-# Step 1: Use the Maven image with OpenJDK for building the app
-FROM maven:3.9-openjdk-21 AS build
+# Step 1: Use the official Maven image for building the app
+FROM maven:3.9.1-eclipse-temurin-21 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -11,8 +11,8 @@ COPY src /app/src/
 # Build the JAR file using Maven
 RUN mvn clean install
 
-# Step 2: Use a smaller OpenJDK image to run the app (avoiding unnecessary build dependencies)
-FROM openjdk:21-jdk-slim
+# Step 2: Use a smaller OpenJDK image to run the app
+FROM eclipse-temurin:21-jdk-alpine
 
 # Set the maintainer information
 MAINTAINER bits-pilani.com
