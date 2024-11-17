@@ -2,9 +2,11 @@ package com.example.demo.security;
 
 import com.example.demo.models.Customer;
 import com.example.demo.models.RestaurantOwner;
+import com.example.demo.models.DeliveryPersonnel;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.RestaurantOwnerRepository;
 import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
+import com.example.demo.repository.DeliveryPersonnelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,12 +23,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     private CustomerRepository customerRepository;
+    private DeliveryPersonnelRepository deliveryPersonnelRepository;
 
     private RestaurantOwnerRepository restaurantOwnerRepository;
 
-    public UserDetailsServiceImpl(CustomerRepository customerRepository, RestaurantOwnerRepository restaurantOwnerRepository) {
+    public UserDetailsServiceImpl(CustomerRepository customerRepository, RestaurantOwnerRepository restaurantOwnerRepository, DeliveryPersonnelRepository deliveryPersonnelRepository) {
         this.customerRepository = customerRepository;
         this.restaurantOwnerRepository = restaurantOwnerRepository;
+        this.deliveryPersonnelRepository = deliveryPersonnelRepository;
+
     }
 
     @Override
@@ -36,17 +41,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             Customer customer = customerRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Customer not found with email: " + email));
             return createUserDetails(customer.getEmail(), customer.getPassword(), customer.getRole());
-        }
-        else if (restaurantOwnerRepository.existsByEmail(email)) {
+        } else if (deliveryPersonnelRepository.existsByEmail(email)) {
+            DeliveryPersonnel deliveryPersonnel = deliveryPersonnelRepository.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("Delivery Person not found with email: " + email));
+            return createUserDetails(deliveryPersonnel.getEmail(), deliveryPersonnel.getPassword(), deliveryPersonnel.getRole());
+        } else if (restaurantOwnerRepository.existsByEmail(email)) {
             RestaurantOwner owner = restaurantOwnerRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Restaurant Owner not found with email: " + email));
             return createUserDetails(owner.getEmail(), owner.getPassword(), owner.getRole());
         }
-//        else if (deliveryPersonRepository.existsByEmail(email)) {
-//            DeliveryPerson deliveryPerson = deliveryPersonRepository.findByEmail(email)
-//                    .orElseThrow(() -> new UsernameNotFoundException("Delivery Person not found with email: " + email));
-//            return createUserDetails(deliveryPerson.getEmail(), deliveryPerson.getPassword(), deliveryPerson.getRole());
-//        } else if (administratorRepository.existsByEmail(email)) {
+//         else if (administratorRepository.existsByEmail(email)) {
 //            Administrator admin = administratorRepository.findByEmail(email)
 //                    .orElseThrow(() -> new UsernameNotFoundException("Administrator not found with email: " + email));
 //            return createUserDetails(admin.getEmail(), admin.getPassword(), admin.getRole());
