@@ -7,8 +7,8 @@
     },
     "servers": [
         {
-            "url": "https://0ba3-2401-4900-1c52-2c1d-edce-29a2-737a-21d2.ngrok-free.app/",
-            "description": "Dev - Ngrok"
+            "url": "https://food-delivery-system-admin-onfw.onrender.com/",
+            "description": "Remote"
         },
         {
             "url": "http://localhost:3000",
